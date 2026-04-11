@@ -11,9 +11,6 @@ function App() {
         <div className="shape shape-3"></div>
       </div>
       <div className="content-wrapper animate-fade-in">
-        <header className="app-header">
-          <h1>NSS REPORT GENERATOR</h1>
-        </header>
         <main>
           <ReportForm />
         </main>

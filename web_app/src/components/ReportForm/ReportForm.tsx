@@ -61,9 +61,9 @@ const ReportForm: React.FC = () => {
     <div className="report-form glass-panel">
       <div className="form-header">
         <img src={nssLogo} alt="NSS Logo" className="nss-logo-small" />
-        <div>
-          <h2>Create Report</h2>
-          <span className="subtitle-text">NSS Activity generator</span>
+        <div className="form-title-container">
+          <h1 className="main-title">NSS REPORT GENERATOR</h1>
+          <span className="subtitle-text">Create Activity Report</span>
         </div>
       </div>
 
