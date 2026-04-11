@@ -44,17 +44,17 @@ export const generateNSSReport = async (
     doc.setFontSize(18); 
     currentY += 18; // move down by font height approx
     doc.text("REPORTS OF COMMUNITY ACTIVITIES", pageWidth / 2, currentY, { align: "center" });
-    currentY += 10;
+    currentY += 20; // Increased spacing between header and table layout
 
-    const totalFlex = 8.5; // Changed from 8 to give more room to the first column while retaining dart's column alignment engine.
+    const totalFlex = 8.2;
     const flexUnit = contentWidth / totalFlex;
     
     doc.setLineWidth(1);
     doc.setDrawColor(0);
 
-    // Row 1 (1.5, 2, 1, 1, 2, 1)
+    // Row 1
     const row1Heights = 24;
-    const row1Widths = [flexUnit * 1.5, flexUnit * 2, flexUnit * 1, flexUnit * 1, flexUnit * 2, flexUnit * 1];
+    const row1Widths = [flexUnit * 1.2, flexUnit * 2, flexUnit * 1, flexUnit * 1, flexUnit * 2, flexUnit * 1];
     const row1Data = [
         {text: 'Date', bold: true}, {text: formattedDate, bold: false}, 
         {text: 'Duration', bold: true}, {text: data.duration, bold: false}, 
@@ -66,7 +66,7 @@ export const generateNSSReport = async (
         // Draw pw.TableBorder cell
         doc.rect(currentX, currentY, row1Widths[i], row1Heights);
         doc.setFont(row1Data[i].bold ? fontBold : fontRegular, row1Data[i].bold ? "bold" : "normal");
-        doc.setFontSize(14);
+        doc.setFontSize(13);
         doc.text(row1Data[i].text, currentX + 5, currentY + 16); // padding 5 + baseline adjustment
         currentX += row1Widths[i];
     }
@@ -74,14 +74,14 @@ export const generateNSSReport = async (
 
     // Row 2 (pw.Border(left, right, bottom, verticalInside))
     const row2Heights = 24;
-    doc.rect(margin, currentY, flexUnit * 1.5, row2Heights); 
-    doc.rect(margin + flexUnit * 1.5, currentY, flexUnit * 7, row2Heights); 
+    doc.rect(margin, currentY, flexUnit * 1.2, row2Heights); 
+    doc.rect(margin + flexUnit * 1.2, currentY, flexUnit * 7, row2Heights); 
     
     doc.setFont(fontBold, "bold");
     doc.text('Program', margin + 5, currentY + 16);
     doc.setFont(fontRegular, "normal");
     // truncate or handle if program name is too long, but let's keep it simple
-    doc.text(data.name, margin + flexUnit * 1.5 + 5, currentY + 16);
+    doc.text(data.name, margin + flexUnit * 1.2 + 5, currentY + 16);
     
     currentY += row2Heights;
 
@@ -93,7 +93,7 @@ export const generateNSSReport = async (
     // Fills exactly the remaining height
     const highlightsHeight = pageHeight - paddingBottom - photoGridHeight - photoGridSpacing - currentY;
     
-    const col1Width = flexUnit * 1.5;
+    const col1Width = flexUnit * 1.2;
     const col2Width = flexUnit * 7;
     
     doc.rect(margin, currentY, col1Width, highlightsHeight);
