@@ -12,11 +12,6 @@ function App() {
       </div>
       <div className="content-wrapper animate-fade-in">
         <header className="app-header">
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/4/4b/National_Service_Scheme_symbol.svg" 
-            alt="NSS Logo" 
-            className="nss-logo" 
-          />
           <h1>NSS REPORT GENERATOR</h1>
         </header>
         <main>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Download, Share2, FileText, Type, Layers, Calendar, Clock, Users, Star } from 'lucide-react';
+import { Download, Share2, Type, Layers, Calendar, Clock, Users, Star } from 'lucide-react';
 import ImageUploader from '../ImageUploader/ImageUploader';
 import { generateNSSReport } from '../../services/pdfGenerator';
+import nssLogo from '../../assets/nss_logo.png';
 import './ReportForm.css';
 
 const IconPlate: React.FC<{ icon: React.ReactNode, color: string }> = ({ icon, color }) => (
@@ -19,7 +20,7 @@ const ReportForm: React.FC = () => {
     volunteerCount: '',
     highlights: '',
   });
-  
+
   const [images, setImages] = useState<File[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -47,52 +48,50 @@ const ReportForm: React.FC = () => {
 
     setIsGenerating(true);
     try {
-        await generateNSSReport(formData, images, share);
+      await generateNSSReport(formData, images, share);
     } catch (e) {
-        console.error('Error generating report:', e);
-        alert('Failed to generate report.');
+      console.error('Error generating report:', e);
+      alert('Failed to generate report.');
     } finally {
-        setIsGenerating(false);
+      setIsGenerating(false);
     }
   };
 
   return (
     <div className="report-form glass-panel">
       <div className="form-header">
-        <div className="glass-icon-large" style={{ color: '#5a67d8' }}>
-          <FileText size={32} />
-        </div>
+        <img src={nssLogo} alt="NSS Logo" className="nss-logo-small" />
         <div>
           <h2>Create Report</h2>
           <span className="subtitle-text">NSS Activity generator</span>
         </div>
       </div>
-      
+
       <div className="form-grid">
         <div className="form-group full-width">
           <div className="label-wrapper">
-             <IconPlate icon={<Type size={18} />} color="#ed64a6" />
-             <label htmlFor="name">Program Name</label>
+            <IconPlate icon={<Type size={18} />} color="#ed64a6" />
+            <label htmlFor="name">Program Name</label>
           </div>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleInputChange} 
-            placeholder="e.g. Campus Cleanup Drive" 
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="e.g. Campus Cleanup Drive"
           />
         </div>
 
         <div className="form-group full-width">
           <div className="label-wrapper">
-             <IconPlate icon={<Layers size={18} />} color="#4299e1" />
-             <label htmlFor="category">Event Category</label>
+            <IconPlate icon={<Layers size={18} />} color="#4299e1" />
+            <label htmlFor="category">Event Category</label>
           </div>
-          <select 
-            id="category" 
-            name="category" 
-            value={formData.category} 
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
             onChange={handleInputChange}
           >
             <option value="Campus">Campus</option>
@@ -100,63 +99,63 @@ const ReportForm: React.FC = () => {
             <option value="Orientation">Orientation</option>
           </select>
         </div>
-        
+
         <div className="form-group">
           <div className="label-wrapper">
-             <IconPlate icon={<Calendar size={18} />} color="#48bb78" />
-             <label htmlFor="date">Date</label>
+            <IconPlate icon={<Calendar size={18} />} color="#48bb78" />
+            <label htmlFor="date">Date</label>
           </div>
-          <input 
-            type="date" 
-            id="date" 
-            name="date" 
-            value={formData.date} 
-            onChange={handleInputChange} 
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleInputChange}
           />
         </div>
-        
+
         <div className="form-group">
           <div className="label-wrapper">
-             <IconPlate icon={<Clock size={18} />} color="#ecc94b" />
-             <label htmlFor="duration">Duration (Hours)</label>
+            <IconPlate icon={<Clock size={18} />} color="#ecc94b" />
+            <label htmlFor="duration">Duration (Hours)</label>
           </div>
-          <input 
-            type="number" 
-            id="duration" 
-            name="duration" 
-            value={formData.duration} 
-            onChange={handleInputChange} 
-            placeholder="e.g. 4" 
-            min="1"
-          />
-        </div>
-        
-        <div className="form-group full-width">
-          <div className="label-wrapper">
-             <IconPlate icon={<Users size={18} />} color="#9f7aea" />
-             <label htmlFor="volunteerCount">Number of Volunteers Participated</label>
-          </div>
-          <input 
-            type="number" 
-            id="volunteerCount" 
-            name="volunteerCount" 
-            value={formData.volunteerCount} 
-            onChange={handleInputChange} 
-            placeholder="e.g. 50" 
+          <input
+            type="number"
+            id="duration"
+            name="duration"
+            value={formData.duration}
+            onChange={handleInputChange}
+            placeholder="e.g. 4"
             min="1"
           />
         </div>
 
         <div className="form-group full-width">
           <div className="label-wrapper">
-             <IconPlate icon={<Star size={18} />} color="#f56565" />
-             <label htmlFor="highlights">Highlights of Program</label>
+            <IconPlate icon={<Users size={18} />} color="#9f7aea" />
+            <label htmlFor="volunteerCount">Number of Volunteers Participated</label>
           </div>
-          <textarea 
-            id="highlights" 
-            name="highlights" 
-            value={formData.highlights} 
-            onChange={handleInputChange} 
+          <input
+            type="number"
+            id="volunteerCount"
+            name="volunteerCount"
+            value={formData.volunteerCount}
+            onChange={handleInputChange}
+            placeholder="e.g. 50"
+            min="1"
+          />
+        </div>
+
+        <div className="form-group full-width">
+          <div className="label-wrapper">
+            <IconPlate icon={<Star size={18} />} color="#f56565" />
+            <label htmlFor="highlights">Highlights of Program</label>
+          </div>
+          <textarea
+            id="highlights"
+            name="highlights"
+            value={formData.highlights}
+            onChange={handleInputChange}
             placeholder="Describe the key activities and outcomes..."
             rows={5}
           />
@@ -166,17 +165,17 @@ const ReportForm: React.FC = () => {
       <ImageUploader images={images} onImagesChange={setImages} />
 
       <div className="form-actions">
-        <button 
-          className="btn" 
+        <button
+          className="btn"
           onClick={() => handleGenerateClick(true)}
           disabled={isGenerating}
         >
           <Share2 size={18} color="#5a67d8" />
           <span>{isGenerating ? 'Processing...' : 'Share PDF'}</span>
         </button>
-        
-        <button 
-          className="btn btn-primary" 
+
+        <button
+          className="btn btn-primary"
           onClick={() => handleGenerateClick(false)}
           disabled={isGenerating}
         >
