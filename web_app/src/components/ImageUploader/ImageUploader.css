@@ -30,8 +30,8 @@
 }
 
 .upload-box {
-  border: none;
-  border-radius: 20px;
+  border: 1px dashed var(--shadow-dark);
+  border-radius: 16px;
   height: 140px;
   display: flex;
   flex-direction: column;
@@ -58,8 +58,9 @@
 .image-preview-container {
   position: relative;
   height: 140px;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: var(--neu-outset);
   background-color: var(--bg-color);
   padding: 5px; /* Creates a pseudo-frame using the background color */

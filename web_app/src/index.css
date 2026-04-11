@@ -13,10 +13,10 @@
   --shadow-light: #ffffff;
   --shadow-dark: #c8cbd8;
 
-  --neu-outset: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-  --neu-inset: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-  --neu-btn: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
-  --neu-btn-active: inset 4px 4px 10px var(--shadow-dark), inset -4px -4px 10px var(--shadow-light);
+  --neu-outset: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
+  --neu-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  --neu-btn: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light);
+  --neu-btn-active: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
 }
 
 * {
@@ -40,9 +40,9 @@ input, textarea, select {
   font-family: 'Inter', sans-serif;
   width: 100%;
   padding: 14px 20px;
-  border-radius: 16px;
+  border-radius: 12px;
   background-color: var(--bg-color);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: var(--neu-inset);
   color: var(--text-main);
   font-size: 1rem;
@@ -71,7 +71,7 @@ input::placeholder, textarea::placeholder {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-main);

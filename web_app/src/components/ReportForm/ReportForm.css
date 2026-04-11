@@ -1,8 +1,9 @@
 .neumorphic-panel {
   padding: 40px;
   width: 100%;
-  border-radius: 36px;
+  border-radius: 24px;
   background-color: var(--bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: var(--neu-outset);
 }
 
@@ -16,8 +17,9 @@
 .neu-icon-large {
   width: 64px;
   height: 64px;
-  border-radius: 20px;
+  border-radius: 16px;
   background: var(--bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: var(--neu-outset);
   display: flex;
   align-items: center;
@@ -55,8 +57,9 @@
 .icon-plate {
   width: 36px;
   height: 36px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--bg-color);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: var(--neu-outset);
   display: flex;
   align-items: center;
