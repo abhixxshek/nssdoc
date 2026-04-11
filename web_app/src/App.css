@@ -104,6 +104,24 @@
   60% { transform: scale(1); }
 }
 
+.author-name {
+  background: linear-gradient(270deg, var(--primary), var(--secondary), var(--tertiary), var(--primary));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: footerGradient 4s ease infinite;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+@keyframes footerGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .social-link {
   display: inline-flex;
   align-items: center;
@@ -117,12 +135,19 @@
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(8px);
+  animation: breatheGlow 3s ease-in-out infinite;
+}
+
+@keyframes breatheGlow {
+  0%, 100% { box-shadow: 0 4px 10px rgba(225, 48, 108, 0.15); }
+  50% { box-shadow: 0 4px 25px rgba(225, 48, 108, 0.4); transform: translateY(-2px); }
 }
 
 .social-link:hover {
-  transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.9);
+  animation: none;
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.95);
   color: #E1306C; /* Instagram native pink */
   border-color: #E1306C;
-  box-shadow: 0 6px 16px rgba(225, 48, 108, 0.25);
+  box-shadow: 0 6px 20px rgba(225, 48, 108, 0.5);
 }
