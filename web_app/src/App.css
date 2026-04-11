@@ -105,14 +105,14 @@
 }
 
 .author-name {
-  background: linear-gradient(270deg, var(--primary), var(--secondary), var(--tertiary), var(--primary));
+  background: linear-gradient(270deg, #1e40af, #be185d, #6b21a8, #1e40af);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: footerGradient 4s ease infinite;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.5px;
 }
 
@@ -132,22 +132,25 @@
   transition: all 0.3s ease;
   padding: 8px 18px;
   border-radius: 20px;
-  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(8px);
-  animation: breatheGlow 3s ease-in-out infinite;
+  
+  /* Gradient Shimmer Base */
+  background: linear-gradient(90deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.95) 25%, rgba(225,48,108,0.2) 50%, rgba(255,255,255,0.95) 75%, rgba(255,255,255,0.7) 100%);
+  background-size: 200% auto;
+  animation: shimmerButton 3s linear infinite;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-@keyframes breatheGlow {
-  0%, 100% { box-shadow: 0 4px 10px rgba(225, 48, 108, 0.15); }
-  50% { box-shadow: 0 4px 25px rgba(225, 48, 108, 0.4); transform: translateY(-2px); }
+@keyframes shimmerButton {
+  to { background-position: -200% center; }
 }
 
 .social-link:hover {
-  animation: none;
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.95);
   color: #E1306C; /* Instagram native pink */
   border-color: #E1306C;
-  box-shadow: 0 6px 20px rgba(225, 48, 108, 0.5);
+  box-shadow: 0 6px 20px rgba(225, 48, 108, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  /* Explicitly setting no translation to lock it flat */
+  transform: translateY(0px);
 }
