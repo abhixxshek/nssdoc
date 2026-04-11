@@ -24,9 +24,21 @@
 
 .main-title {
   font-size: 1.4rem;
-  color: var(--text-main);
   line-height: 1.1;
   margin-bottom: 2px;
+  background: linear-gradient(270deg, var(--primary), #5a67d8, var(--secondary));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: textGradientFlow 4s ease infinite;
+}
+
+@keyframes textGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .subtitle-text {
