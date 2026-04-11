@@ -1,0 +1,109 @@
+.image-uploader {
+  margin-top: 32px;
+}
+
+.uploader-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.uploader-header label {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.image-count {
+  font-size: 0.85rem;
+  color: #fff;
+  background: var(--primary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: var(--neu-outset);
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 20px;
+}
+
+.upload-box {
+  border: none;
+  border-radius: 20px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--bg-color);
+  color: var(--text-muted);
+  box-shadow: var(--neu-inset);
+}
+
+.upload-box:hover {
+  color: var(--primary);
+  /* Slight emphasis on inset depth when hovered */
+  box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
+}
+
+.upload-icon {
+  margin-bottom: 4px;
+}
+
+.image-preview-container {
+  position: relative;
+  height: 140px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--neu-outset);
+  background-color: var(--bg-color);
+  padding: 5px; /* Creates a pseudo-frame using the background color */
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.image-preview-container:hover .image-preview {
+  transform: scale(1.05);
+}
+
+.remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--bg-color);
+  border: none;
+  color: #f56565;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--neu-outset);
+}
+
+.remove-btn:hover {
+  color: #fff;
+  background-color: #f56565;
+}
+
+.remove-btn:active {
+  box-shadow: var(--neu-btn-active);
+}
+
+.hidden-input {
+  display: none !important;
+}
