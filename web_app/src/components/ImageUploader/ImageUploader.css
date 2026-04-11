@@ -108,3 +108,13 @@
 .hidden-input {
   display: none !important;
 }
+
+@media (max-width: 600px) {
+  .image-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .image-preview-container, .upload-box {
+    height: 120px; /* Compress slightly to prevent overflowing standard mobile screens */
+  }
+}
