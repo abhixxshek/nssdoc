@@ -1,22 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Soft Lavender/Grey background from reference */
-  --bg-color: #e6e7ee;
+  /* Fluid Glass Colors */
+  --bg-color: #f4f7fe;
   
-  --text-main: #31344b;
-  --text-muted: #8c98af;
+  --text-main: #1a202c;
+  --text-muted: #718096;
   
-  --primary: #5a67d8; /* Colorful pop */
+  /* Vibrant fluid gradients */
+  --primary: #4299e1; 
+  --secondary: #ed64a6;
+  --tertiary: #9f7aea;
   
-  /* Neumorphism Shadows */
-  --shadow-light: #ffffff;
-  --shadow-dark: #c8cbd8;
-
-  --neu-outset: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
-  --neu-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  --neu-btn: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light);
-  --neu-btn-active: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
+  /* Glassmorphism effects */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  
+  --input-bg: rgba(255, 255, 255, 0.7);
+  --input-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
 * {
@@ -41,9 +43,10 @@ input, textarea, select {
   width: 100%;
   padding: 14px 20px;
   border-radius: 12px;
-  background-color: var(--bg-color);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: var(--neu-inset);
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--input-shadow);
+  backdrop-filter: blur(8px);
   color: var(--text-main);
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -52,7 +55,9 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   /* Give a slight color tint on focus */
-  box-shadow: inset 6px 6px 12px #c8cbd8, inset -6px -6px 12px #ffffff;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
 }
 
 input::placeholder, textarea::placeholder {
@@ -71,19 +76,32 @@ input::placeholder, textarea::placeholder {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--glass-border);
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-color);
+  background: var(--glass-bg);
   color: var(--text-main);
-  box-shadow: var(--neu-outset);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  backdrop-filter: blur(10px);
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
 .btn:active {
-  box-shadow: var(--neu-btn-active);
+  transform: translateY(0);
 }
 
 .btn-primary {
-  color: var(--primary);
+  background: linear-gradient(135deg, #4299e1, #667eea);
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3182ce, #5a67d8);
 }
 
 /* Animations */

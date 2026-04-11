@@ -20,7 +20,7 @@
   background: var(--primary);
   padding: 4px 10px;
   border-radius: 12px;
-  box-shadow: var(--neu-outset);
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
 }
 
 .image-grid {
@@ -30,7 +30,7 @@
 }
 
 .upload-box {
-  border: 1px dashed var(--shadow-dark);
+  border: 2px dashed rgba(66, 153, 225, 0.4);
   border-radius: 16px;
   height: 140px;
   display: flex;
@@ -40,15 +40,15 @@
   gap: 12px;
   cursor: pointer;
   transition: all 0.3s;
-  background-color: var(--bg-color);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
   color: var(--text-muted);
-  box-shadow: var(--neu-inset);
 }
 
 .upload-box:hover {
+  border-color: var(--primary);
   color: var(--primary);
-  /* Slight emphasis on inset depth when hovered */
-  box-shadow: inset 8px 8px 16px var(--shadow-dark), inset -8px -8px 16px var(--shadow-light);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .upload-icon {
@@ -60,9 +60,10 @@
   height: 140px;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: var(--neu-outset);
-  background-color: var(--bg-color);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
   padding: 5px; /* Creates a pseudo-frame using the background color */
 }
 
@@ -85,24 +86,26 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: var(--bg-color);
-  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--glass-border);
   color: #f56565;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: var(--neu-outset);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .remove-btn:hover {
   color: #fff;
   background-color: #f56565;
+  border-color: #f56565;
 }
 
 .remove-btn:active {
-  box-shadow: var(--neu-btn-active);
+  transform: scale(0.95);
 }
 
 .hidden-input {

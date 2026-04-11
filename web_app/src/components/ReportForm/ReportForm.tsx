@@ -5,7 +5,7 @@ import { generateNSSReport } from '../../services/pdfGenerator';
 import './ReportForm.css';
 
 const IconPlate: React.FC<{ icon: React.ReactNode, color: string }> = ({ icon, color }) => (
-  <div className="icon-plate" style={{ color }}>
+  <div className="glass-icon-plate" style={{ color }}>
     {icon}
   </div>
 );
@@ -57,9 +57,9 @@ const ReportForm: React.FC = () => {
   };
 
   return (
-    <div className="report-form neumorphic-panel">
+    <div className="report-form glass-panel">
       <div className="form-header">
-        <div className="neu-icon-large" style={{ color: '#5a67d8' }}>
+        <div className="glass-icon-large" style={{ color: '#5a67d8' }}>
           <FileText size={32} />
         </div>
         <div>
