@@ -61,6 +61,20 @@ input::placeholder, textarea::placeholder {
   color: var(--text-muted);
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-color: var(--glass-bg);
+  padding: 5px;
+  border-radius: 8px;
+  filter: invert(0.4) sepia(1) saturate(3) hue-rotate(180deg);
+  transition: all 0.3s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background-color: var(--glass-border);
+  filter: invert(0.5) sepia(1) saturate(5) hue-rotate(190deg);
+}
+
 /* Premium Buttons */
 .btn {
   display: inline-flex;

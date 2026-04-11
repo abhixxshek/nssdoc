@@ -12,10 +12,15 @@ const IconPlate: React.FC<{ icon: React.ReactNode, color: string }> = ({ icon, c
 );
 
 const ReportForm: React.FC = () => {
+  const getLocalDate = () => {
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000; 
+    return (new Date(Date.now() - tzOffset)).toISOString().split('T')[0];
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     category: 'Community',
-    date: '',
+    date: getLocalDate(),
     duration: '',
     volunteerCount: '',
     highlights: '',
