@@ -38,12 +38,20 @@ export const generateNSSReport = async (
   const pageHeight = doc.internal.pageSize.getHeight();
   const contentWidth = pageWidth - 2 * margin;
 
-  if (data.category === "Community") {
-    // Title
+  // Group the formal tabular templates together
+  const formalCategories = ["Community", "Campus", "Orientation"];
+
+  if (formalCategories.includes(data.category)) {
+    // Title mapping
+    let reportTitle = "NSS ACTIVITY REPORT";
+    if (data.category === "Community") reportTitle = "REPORTS OF COMMUNITY ACTIVITIES";
+    else if (data.category === "Campus") reportTitle = "REPORTS OF CAMPUS ACTIVITIES";
+    else if (data.category === "Orientation") reportTitle = "REPORT OF ORIENTATION PROGRAM";
+
     doc.setFont(fontBold, "bold");
     doc.setFontSize(18); 
     currentY += 18; // move down by font height approx
-    doc.text("REPORTS OF COMMUNITY ACTIVITIES", pageWidth / 2, currentY, { align: "center" });
+    doc.text(reportTitle, pageWidth / 2, currentY, { align: "center" });
     currentY += 20; // Increased spacing between header and table layout
 
     const totalFlex = 8.2;
@@ -109,6 +117,120 @@ export const generateNSSReport = async (
 
     currentY += highlightsHeight + photoGridSpacing;
 
+    // Photo grid - strictly 2x2 grid (pw.Table with Border.All, and fixed height 180)
+    const cellWidth = contentWidth / 2;
+    const cellHeight = 180;
+    
+    for (let i = 0; i < 4; i++) {
+        const row = Math.floor(i / 2);
+        const col = i % 2;
+        const xPositions = margin + (col * cellWidth);
+        const yPositions = currentY + (row * cellHeight);
+        
+        doc.setLineWidth(1);
+        doc.rect(xPositions, yPositions, cellWidth, cellHeight);
+        
+        if (i < images.length) {
+            try {
+                const dataUrl = await fileToDataUrl(images[i]);
+                const padding = 5; // EdgeInsets.all(5)
+                doc.addImage(
+                  dataUrl, 
+                  (images[i].type.includes('png') ? 'PNG' : 'JPEG'), 
+                  xPositions + padding, 
+                  yPositions + padding, 
+                  cellWidth - 2 * padding, 
+                  cellHeight - 2 * padding,
+                  undefined,
+                   'FAST'
+                );
+            } catch (e) {
+                console.error("Failed to add image", e);
+                doc.setFontSize(14);
+                doc.text("No Image", xPositions + cellWidth / 2 - 30, yPositions + cellHeight / 2);
+            }
+        } else {
+            doc.setFont(fontRegular, "normal");
+            doc.setFontSize(14);
+            doc.text("No Image", xPositions + cellWidth / 2 - 30, yPositions + cellHeight / 2);
+        }
+    }
+  } else {
+    // Non-Formal template fallback (General/Other)
+    doc.setFont(fontBold, "bold");
+    doc.setFontSize(24);
+    currentY += 24;
+    doc.text("NSS Activity Report", margin, currentY);
+    currentY += 10;
+    
+    doc.setFontSize(18);
+    doc.setFont(fontRegular, "normal");
+    currentY += 18;
+    doc.text(`Program Name: ${data.name}`, margin, currentY);
+    currentY += 14;
+    
+    doc.setFontSize(14);
+    doc.text(`Category: ${data.category}`, margin, currentY);
+    currentY += 14;
+    doc.text(`Date: ${formattedDate}`, margin, currentY);
+    currentY += 14;
+    doc.text(`Location: (Not Specified)`, margin, currentY); 
+    currentY += 10;
+    
+    doc.setLineWidth(1);
+    doc.line(margin, currentY, pageWidth - margin, currentY); 
+    currentY += 10; // Divider 
+    currentY += 20; // pw.SizedBox(height:20)
+    
+    if (images.length > 0) {
+      const cellWidth = (contentWidth - 10) / 2; // crossAxisSpacing: 10
+      const cellHeight = cellWidth / 0.8; // childAspectRatio: 0.8
+      
+      for (let i = 0; i < images.length; i++) {
+          const row = Math.floor(i / 2);
+          const col = i % 2;
+          const xPositions = margin + (col * (cellWidth + 10));
+          const yPositions = currentY + (row * (cellHeight + 10)); // mainAxisSpacing: 10
+          
+          try {
+              const dataUrl = await fileToDataUrl(images[i]);
+              doc.addImage(dataUrl, (images[i].type.includes('png') ? 'PNG' : 'JPEG'), xPositions, yPositions, cellWidth, cellWidth, undefined, 'FAST');
+              
+              doc.setFontSize(10);
+              doc.setTextColor(150, 150, 150);
+              // Provide some mock detail since we lack the Exif parsing Dart did
+              doc.text(`Uploaded File Snippet`, xPositions, yPositions + cellWidth + 12);
+              doc.setTextColor(0, 0, 0); 
+          } catch (e) {
+              console.error("Failed to add image", e);
+          }
+      }
+      currentY += Math.ceil(images.length / 2) * (cellHeight + 10);
+    }
+    
+    currentY += 20; // pw.SizedBox(height:20) or just some spacing
+    doc.setLineWidth(1);
+    doc.line(margin, currentY, pageWidth - margin, currentY); 
+    currentY += 15;
+    doc.setFontSize(12);
+    doc.text(`Total Photos: ${images.length}`, margin, currentY);
+    doc.text("Generated by NSS Docs App", pageWidth - margin, currentY, { align: "right" });
+  }
+
+  const fileName = `NSS_Report_${data.name.replace(/ /g, '_')}.pdf`;
+  
+  if (share && navigator.share) {
+    try {
+        const pdfBlob = doc.output('blob');
+        const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+        await navigator.share({ title: fileName, files: [file] });
+    } catch (e) {
+        doc.save(fileName);
+    }
+  } else {
+    doc.save(fileName);
+  }
+};
     // community photo grid - strictly 2x2 grid (pw.Table with Border.All, and fixed height 180)
     const cellWidth = contentWidth / 2;
     const cellHeight = 180;
