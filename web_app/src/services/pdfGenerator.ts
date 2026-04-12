@@ -10,12 +10,55 @@ export interface ReportData {
   highlights: string;
 }
 
-const fileToDataUrl = (file: File): Promise<string> => {
+// Replaces fileToDataUrl with a compression function
+const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.7): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
     reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate new dimensions maintaining aspect ratio
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxWidth) {
+            width = Math.round((width * maxWidth) / height);
+            height = maxWidth;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        
+        if (!ctx) {
+          // Fallback to original if canvas fails
+          resolve(event.target?.result as string);
+          return;
+        }
+        
+        // Fill white background in case of transparent PNGs converting to JPEG
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Output as JPEG for much better PDF compression
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      };
+      img.onerror = (e) => reject(e);
+    };
+    reader.onerror = (e) => reject(e);
   });
 };
 
@@ -114,7 +157,7 @@ export const generateNSSReport = async (
     
     // Highlights User Content
     doc.setFont(fontRegular, "normal");
-    doc.setFontSize(14); // <--- UPDATED: User content font size explicitly set to 14
+    doc.setFontSize(14); // User content font size explicitly set to 14
     const highlightsLines = doc.splitTextToSize(data.highlights, col2Width - 10);
     // Draw text with bounding limit so it doesn't overflow
     doc.text(highlightsLines, margin + col1Width + 5, currentY + 16);
@@ -136,11 +179,12 @@ export const generateNSSReport = async (
         
         if (i < images.length) {
             try {
-                const dataUrl = await fileToDataUrl(images[i]);
+                // Compress image before adding to PDF
+                const dataUrl = await compressImage(images[i]);
                 const padding = 5; // EdgeInsets.all(5)
                 doc.addImage(
                   dataUrl, 
-                  (images[i].type.includes('png') ? 'PNG' : 'JPEG'), 
+                  'JPEG', // Forced to JPEG by our compression function
                   xPositions + padding, 
                   yPositions + padding, 
                   cellWidth - 2 * padding, 
@@ -197,8 +241,9 @@ export const generateNSSReport = async (
           const yPositions = currentY + (row * (cellHeight + 10)); // mainAxisSpacing: 10
           
           try {
-              const dataUrl = await fileToDataUrl(images[i]);
-              doc.addImage(dataUrl, (images[i].type.includes('png') ? 'PNG' : 'JPEG'), xPositions, yPositions, cellWidth, cellWidth, undefined, 'FAST');
+              // Compress image before adding to PDF
+              const dataUrl = await compressImage(images[i]);
+              doc.addImage(dataUrl, 'JPEG', xPositions, yPositions, cellWidth, cellWidth, undefined, 'FAST');
               
               doc.setFontSize(10);
               doc.setTextColor(150, 150, 150);
