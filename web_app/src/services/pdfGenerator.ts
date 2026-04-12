@@ -11,7 +11,7 @@ export interface ReportData {
 }
 
 // Replaces fileToDataUrl with a compression function
-const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.7): Promise<string> => {
+const compressImage = (file: File, maxWidth: number = 900, quality: number = 0.8): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
