@@ -74,7 +74,7 @@ export const generateNSSReport = async (
         // Draw pw.TableBorder cell
         doc.rect(currentX, currentY, row1Widths[i], row1Heights);
         doc.setFont(row1Data[i].bold ? fontBold : fontRegular, row1Data[i].bold ? "bold" : "normal");
-        doc.setFontSize(13);
+        doc.setFontSize(13); // Ensuring table text stays at 13
         doc.text(row1Data[i].text, currentX + 5, currentY + 16); // padding 5 + baseline adjustment
         currentX += row1Widths[i];
     }
@@ -86,9 +86,9 @@ export const generateNSSReport = async (
     doc.rect(margin + flexUnit * 1.2, currentY, flexUnit * 7, row2Heights); 
     
     doc.setFont(fontBold, "bold");
+    doc.setFontSize(13);
     doc.text('Program', margin + 5, currentY + 16);
     doc.setFont(fontRegular, "normal");
-    // truncate or handle if program name is too long, but let's keep it simple
     doc.text(data.name, margin + flexUnit * 1.2 + 5, currentY + 16);
     
     currentY += row2Heights;
@@ -107,10 +107,14 @@ export const generateNSSReport = async (
     doc.rect(margin, currentY, col1Width, highlightsHeight);
     doc.rect(margin + col1Width, currentY, col2Width, highlightsHeight);
     
+    // Highlights Label
     doc.setFont(fontBold, "bold");
+    doc.setFontSize(13); // Keeping label consistent with other table headers
     doc.text("Highlights of program", margin + 5, currentY + 16, { maxWidth: col1Width - 10 });
     
+    // Highlights User Content
     doc.setFont(fontRegular, "normal");
+    doc.setFontSize(14); // <--- UPDATED: User content font size explicitly set to 14
     const highlightsLines = doc.splitTextToSize(data.highlights, col2Width - 10);
     // Draw text with bounding limit so it doesn't overflow
     doc.text(highlightsLines, margin + col1Width + 5, currentY + 16);
