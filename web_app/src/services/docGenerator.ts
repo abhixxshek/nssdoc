@@ -368,15 +368,15 @@ export const generateNSSDoc = async (
       if (i < images.length) {
         try {
           const dataUrl = await compressImage(images[i]);
-          // In PDF: cellWidth 265.6pt - 10pt padding = 255.6pt => 340px at 96 DPI
-          // cellHeight 180pt - 10pt padding = 170pt => 226px at 96 DPI
+          // In PDF: cellWidth 251.6pt, cellHeight 180pt, padding 5pt on all 4 sides => image: 241.6pt (322px) x 170pt (227px)
+          // LineRuleType.EXACT at 3400 twips (170pt) eliminates font descent, ensuring exact 5pt (100 twips) gap on all 4 sides
           cellContent = new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 0, line: 240, lineRule: LineRuleType.AUTO },
+            spacing: { before: 0, after: 0, line: 3400, lineRule: LineRuleType.EXACT },
             children: [
               new ImageRun({
                 data: dataUrl,
-                transformation: { width: 322, height: 226 },
+                transformation: { width: 322, height: 227 },
                 type: "jpg",
               }),
             ],
