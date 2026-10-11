@@ -78,12 +78,12 @@ export const generateNSSDoc = async (
       reportTitle = "REPORT OF ORIENTATION PROGRAM";
     }
 
-    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 20pt spacing after (400 twips)
+    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 14pt spacing after (280 twips)
     const titleParagraph = new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: {
         before: 0,
-        after: 400,
+        after: 280,
         line: 360,
         lineRule: LineRuleType.EXACT,
       },
@@ -301,9 +301,9 @@ export const generateNSSDoc = async (
       })
     );
 
-    // Exact height of 6438 twips (321.9pt) exactly replicates the PDF highlightsHeight
+    // Fixed height of 5800 twips (290pt) guarantees the document fits strictly on ONE page
     const row3 = new TableRow({
-      height: { value: 6438, rule: HeightRule.EXACT },
+      height: { value: 5800, rule: HeightRule.EXACT },
       cantSplit: true,
       children: [
         new TableCell({
@@ -341,12 +341,12 @@ export const generateNSSDoc = async (
       rows: [row1, row2, row3],
     });
 
-    // Exact 10pt gap between Highlights section and Photo Grid (matching photoGridSpacing = 10 in PDF)
+    // Spacing between Highlights section and Photo Grid
     const photoGridSpacingParagraph = new Paragraph({
       spacing: {
         before: 0,
         after: 0,
-        line: 200, // 200 twips = exactly 10pt line height
+        line: 160, // 160 twips = 8pt line height
         lineRule: LineRuleType.EXACT,
       },
       children: [
@@ -703,7 +703,7 @@ export const generateNSSDoc = async (
               height: 16838, // A4 height (297mm) in twips
             },
             margin: {
-              top: 640, // 32pt in twips
+              top: 560, // 28pt in twips
               right: 640, // 32pt in twips
               bottom: 560, // 28pt in twips (provides safe buffer so Word stays strictly on page 1)
               left: 1200, // 60pt in twips (60pt binding margin)
