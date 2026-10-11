@@ -94,9 +94,46 @@ textarea {
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(66, 153, 225, 0.4);
+}
+
+.btn-word {
+  background: linear-gradient(135deg, #2b6cb0, #2c5282);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(43, 108, 176, 0.3);
+}
+
+.btn-word:hover {
+  background: linear-gradient(135deg, #2c5282, #1a365d);
+  box-shadow: 0 6px 18px rgba(43, 108, 176, 0.4);
+}
+
+.btn-word svg,
+.btn-primary svg {
+  color: #fff;
 }
 
 @media (max-width: 600px) {
@@ -120,6 +157,14 @@ textarea {
   
   .form-actions {
     flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  
+  .action-group {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .btn {

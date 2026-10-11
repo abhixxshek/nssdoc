@@ -238,7 +238,7 @@ class ReportService {
                               _buildTableCell('Date', fontRegular, fontBold, isHeader: true),
                               _buildTableCell(DateFormat('dd-MM-yy').format(event.date), fontRegular, fontBold),
                               _buildTableCell('Duration', fontRegular, fontBold, isHeader: true),
-                              _buildTableCell(event.duration, fontRegular, fontBold),
+                              _buildTableCell('${event.duration} Hours', fontRegular, fontBold),
                               _buildTableCell('No of volunteers:', fontRegular, fontBold, isHeader: true),
                               _buildTableCell(event.volunteerCount, fontRegular, fontBold),
                           ]

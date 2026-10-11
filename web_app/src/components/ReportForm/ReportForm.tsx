@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Download, Share2, Type, Layers, Calendar, Clock, Users, Star } from 'lucide-react';
+import { Download, Share2, Type, Layers, Calendar, Clock, Users, Star, FileText } from 'lucide-react';
 import ImageUploader from '../ImageUploader/ImageUploader';
 import { generateNSSReport } from '../../services/pdfGenerator';
+import { generateNSSDoc } from '../../services/docGenerator';
 import nssLogo from '../../assets/nss_logo.png';
 import './ReportForm.css';
 
@@ -27,7 +28,8 @@ const ReportForm: React.FC = () => {
   });
 
   const [images, setImages] = useState<File[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingAction, setGeneratingAction] = useState<string | null>(null);
+  const isGenerating = generatingAction !== null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -47,21 +49,26 @@ const ReportForm: React.FC = () => {
     return null;
   };
 
-  const handleGenerateClick = async (share: boolean = false) => {
+  const handleGenerateClick = async (formatType: 'pdf' | 'doc', share: boolean = false) => {
     const error = validateForm();
     if (error) {
       alert(error);
       return;
     }
 
-    setIsGenerating(true);
+    const actionKey = share ? `share-${formatType}` : formatType;
+    setGeneratingAction(actionKey);
     try {
-      await generateNSSReport(formData, images, share);
+      if (formatType === 'pdf') {
+        await generateNSSReport(formData, images, share);
+      } else {
+        await generateNSSDoc(formData, images, share);
+      }
     } catch (e) {
-      console.error('Error generating report:', e);
-      alert('Failed to generate report.');
+      console.error(`Error generating ${formatType.toUpperCase()} report:`, e);
+      alert(`Failed to generate ${formatType.toUpperCase()} report.`);
     } finally {
-      setIsGenerating(false);
+      setGeneratingAction(null);
     }
   };
 
@@ -173,23 +180,53 @@ const ReportForm: React.FC = () => {
       <ImageUploader images={images} onImagesChange={setImages} />
 
       <div className="form-actions">
-        <button
-          className="btn"
-          onClick={() => handleGenerateClick(true)}
-          disabled={isGenerating}
-        >
-          <Share2 size={18} color="#5a67d8" />
-          <span>{isGenerating ? 'Processing...' : 'Share PDF'}</span>
-        </button>
+        <div className="action-group share-group">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => handleGenerateClick('pdf', true)}
+            disabled={isGenerating}
+            title="Share report as PDF"
+          >
+            <Share2 size={18} color="#e53e3e" />
+            <span>{generatingAction === 'share-pdf' ? 'Sharing PDF...' : 'Share PDF'}</span>
+          </button>
 
-        <button
-          className="btn btn-primary"
-          onClick={() => handleGenerateClick(false)}
-          disabled={isGenerating}
-        >
-          <Download size={18} />
-          <span>{isGenerating ? 'Generating...' : 'Download PDF'}</span>
-        </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => handleGenerateClick('doc', true)}
+            disabled={isGenerating}
+            title="Share report as Word DOC"
+          >
+            <Share2 size={18} color="#2b6cb0" />
+            <span>{generatingAction === 'share-doc' ? 'Sharing DOC...' : 'Share DOC'}</span>
+          </button>
+        </div>
+
+        <div className="action-group download-group">
+          <button
+            type="button"
+            className="btn btn-word"
+            onClick={() => handleGenerateClick('doc', false)}
+            disabled={isGenerating}
+            title="Download report in Word (.docx) format"
+          >
+            <FileText size={18} />
+            <span>{generatingAction === 'doc' ? 'Generating DOC...' : 'Download DOC'}</span>
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => handleGenerateClick('pdf', false)}
+            disabled={isGenerating}
+            title="Download report in PDF format"
+          >
+            <Download size={18} />
+            <span>{generatingAction === 'pdf' ? 'Generating PDF...' : 'Download PDF'}</span>
+          </button>
+        </div>
       </div>
     </div>
   );
