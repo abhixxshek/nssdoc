@@ -111,7 +111,7 @@ export const generateNSSReport = async (
 
     // Highlights User Content
     doc.setFont(fontRegular, "normal");
-    doc.setFontSize(14); // User content font size explicitly set to 14
+    doc.setFontSize(13); // User content font size set to 13
     const highlightsLines = doc.splitTextToSize(data.highlights, col2Width - 10);
     // Draw text with bounding limit so it doesn't overflow
     doc.text(highlightsLines, marginLeft + col1Width + 5, currentY + 16);
@@ -148,12 +148,12 @@ export const generateNSSReport = async (
           );
         } catch (e) {
           console.error("Failed to add image", e);
-          doc.setFontSize(14);
+          doc.setFontSize(13);
           doc.text("No Image", xPositions + cellWidth / 2 - 30, yPositions + cellHeight / 2);
         }
       } else {
         doc.setFont(fontRegular, "normal");
-        doc.setFontSize(14);
+        doc.setFontSize(13);
         doc.text("No Image", xPositions + cellWidth / 2 - 30, yPositions + cellHeight / 2);
       }
     }

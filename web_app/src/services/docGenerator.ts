@@ -78,12 +78,12 @@ export const generateNSSDoc = async (
       reportTitle = "REPORT OF ORIENTATION PROGRAM";
     }
 
-    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 14pt spacing after (280 twips)
+    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 20pt spacing after (400 twips)
     const titleParagraph = new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: {
         before: 0,
-        after: 280,
+        after: 400,
         line: 360,
         lineRule: LineRuleType.EXACT,
       },
@@ -277,9 +277,9 @@ export const generateNSSDoc = async (
     });
 
     // Row 3: Highlights of program
-    // Large rectangular box height from PDF
-    // Left label: 12pt bold (size: 24)
-    // Right content: 12pt regular (size: 24) matching PDF visual size
+    // Exact rectangular box height matching PDF highlightsHeight: 321.89pt = 6438 twips
+    // Left label: 13pt bold (size: 26) matching PDF line 109 doc.setFontSize(13)
+    // Right content: 13pt regular (size: 26) matching PDF body font size
     const highlightsCellMargins = { top: 100, bottom: 100, left: 100, right: 100 };
     const highlightsLines = data.highlights ? data.highlights.split("\n") : [""];
     const highlightParagraphs = highlightsLines.map((line, idx) =>
@@ -287,23 +287,23 @@ export const generateNSSDoc = async (
         spacing: {
           before: 0,
           after: idx === highlightsLines.length - 1 ? 0 : 30,
-          line: 240,
+          line: 260,
           lineRule: LineRuleType.AUTO,
         },
         children: [
           new TextRun({
             text: line,
             font: fontName,
-            size: 24, // Exact 12pt (matching PDF visual size)
+            size: 26, // Exact 13pt body font size matching PDF
             color: "000000",
           }),
         ],
       })
     );
 
-    // Fixed height of 5000 twips (250pt) guarantees the document fits strictly on ONE page
+    // Exact height of 6438 twips (321.9pt) exactly replicates the PDF highlightsHeight
     const row3 = new TableRow({
-      height: { value: 5000, rule: HeightRule.EXACT },
+      height: { value: 6438, rule: HeightRule.EXACT },
       cantSplit: true,
       children: [
         new TableCell({
@@ -312,13 +312,13 @@ export const generateNSSDoc = async (
           verticalAlign: VerticalAlign.TOP,
           children: [
             new Paragraph({
-              spacing: { before: 0, after: 0, line: 240, lineRule: LineRuleType.AUTO },
+              spacing: { before: 0, after: 0, line: 260, lineRule: LineRuleType.AUTO },
               children: [
                 new TextRun({
                   text: "Highlights of program",
                   font: fontName,
                   bold: true,
-                  size: 24, // Exact 12pt
+                  size: 26, // Exact 13pt (matching PDF doc.setFontSize(13))
                   color: "000000",
                 }),
               ],
@@ -394,7 +394,7 @@ export const generateNSSDoc = async (
               new TextRun({
                 text: "No Image",
                 font: fontName,
-                size: 24, // 12pt
+                size: 26, // 13pt
                 color: "000000",
               }),
             ],
@@ -408,7 +408,7 @@ export const generateNSSDoc = async (
             new TextRun({
               text: "No Image",
               font: fontName,
-              size: 24, // 12pt
+              size: 26, // 13pt
               color: "000000",
             }),
           ],
@@ -705,7 +705,7 @@ export const generateNSSDoc = async (
             margin: {
               top: 640, // 32pt in twips
               right: 640, // 32pt in twips
-              bottom: 640, // 32pt in twips
+              bottom: 560, // 28pt in twips (provides safe buffer so Word stays strictly on page 1)
               left: 1200, // 60pt in twips (60pt binding margin)
               header: 0, // Ensure header does not encroach on printable area
               footer: 0, // Ensure footer does not encroach on printable area
