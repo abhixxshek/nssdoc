@@ -23,13 +23,17 @@ export const generateNSSReport = async (
   const fontRegular = "times";
   const fontBold = "times";
 
-  // pw.EdgeInsets.all(32)
-  const margin = 32;
-  let currentY = margin;
+  // Page margins with extra left margin for document binding
+  const marginTop = 32;
+  const marginBottom = 32;
+  const marginLeft = 48; // Extra left margin for binding / punching / spiral
+  const marginRight = 32;
+
+  let currentY = marginTop;
   const formattedDate = data.date ? format(parseISO(data.date), "dd-MM-yy") : "";
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const contentWidth = pageWidth - 2 * margin;
+  const contentWidth = pageWidth - marginLeft - marginRight;
 
   // Group the formal tabular templates together
   const formalCategories = ["Community", "Campus", "Orientation"];
@@ -44,7 +48,7 @@ export const generateNSSReport = async (
     doc.setFont(fontBold, "bold");
     doc.setFontSize(18);
     currentY += 18; // move down by font height approx
-    doc.text(reportTitle, pageWidth / 2, currentY, { align: "center" });
+    doc.text(reportTitle, marginLeft + contentWidth / 2, currentY, { align: "center" });
     currentY += 20; // Increased spacing between header and table layout
 
     const totalFlex = 8.2;
@@ -62,7 +66,7 @@ export const generateNSSReport = async (
       { text: 'No of volunteers:', bold: true }, { text: data.volunteerCount, bold: false }
     ];
 
-    let currentX = margin;
+    let currentX = marginLeft;
     for (let i = 0; i < 6; i++) {
       // Draw pw.TableBorder cell
       doc.rect(currentX, currentY, row1Widths[i], row1Heights);
@@ -75,21 +79,21 @@ export const generateNSSReport = async (
 
     // Row 2 (pw.Border(left, right, bottom, verticalInside))
     const row2Heights = 24;
-    doc.rect(margin, currentY, flexUnit * 1.2, row2Heights);
-    doc.rect(margin + flexUnit * 1.2, currentY, flexUnit * 7, row2Heights);
+    doc.rect(marginLeft, currentY, flexUnit * 1.2, row2Heights);
+    doc.rect(marginLeft + flexUnit * 1.2, currentY, flexUnit * 7, row2Heights);
 
     doc.setFont(fontBold, "bold");
     doc.setFontSize(13);
-    doc.text('Program', margin + 5, currentY + 16);
+    doc.text('Program', marginLeft + 5, currentY + 16);
     doc.setFont(fontRegular, "normal");
-    doc.text(data.name, margin + flexUnit * 1.2 + 5, currentY + 16);
+    doc.text(data.name, marginLeft + flexUnit * 1.2 + 5, currentY + 16);
 
     currentY += row2Heights;
 
     // Highlights Box (pw.Expanded)
     const photoGridHeight = 2 * 180; // 2 rows of 180 fixed height
     const photoGridSpacing = 10; // pw.SizedBox(height: 10)
-    const paddingBottom = margin;
+    const paddingBottom = marginBottom;
 
     // Fills exactly the remaining height
     const highlightsHeight = pageHeight - paddingBottom - photoGridHeight - photoGridSpacing - currentY;
@@ -97,20 +101,20 @@ export const generateNSSReport = async (
     const col1Width = flexUnit * 1.2;
     const col2Width = flexUnit * 7;
 
-    doc.rect(margin, currentY, col1Width, highlightsHeight);
-    doc.rect(margin + col1Width, currentY, col2Width, highlightsHeight);
+    doc.rect(marginLeft, currentY, col1Width, highlightsHeight);
+    doc.rect(marginLeft + col1Width, currentY, col2Width, highlightsHeight);
 
     // Highlights Label
     doc.setFont(fontBold, "bold");
     doc.setFontSize(13); // Keeping label consistent with other table headers
-    doc.text("Highlights of program", margin + 5, currentY + 16, { maxWidth: col1Width - 10 });
+    doc.text("Highlights of program", marginLeft + 5, currentY + 16, { maxWidth: col1Width - 10 });
 
     // Highlights User Content
     doc.setFont(fontRegular, "normal");
     doc.setFontSize(14); // User content font size explicitly set to 14
     const highlightsLines = doc.splitTextToSize(data.highlights, col2Width - 10);
     // Draw text with bounding limit so it doesn't overflow
-    doc.text(highlightsLines, margin + col1Width + 5, currentY + 16);
+    doc.text(highlightsLines, marginLeft + col1Width + 5, currentY + 16);
 
     currentY += highlightsHeight + photoGridSpacing;
 
@@ -121,7 +125,7 @@ export const generateNSSReport = async (
     for (let i = 0; i < 4; i++) {
       const row = Math.floor(i / 2);
       const col = i % 2;
-      const xPositions = margin + (col * cellWidth);
+      const xPositions = marginLeft + (col * cellWidth);
       const yPositions = currentY + (row * cellHeight);
 
       doc.setLineWidth(1);
@@ -158,25 +162,25 @@ export const generateNSSReport = async (
     doc.setFont(fontBold, "bold");
     doc.setFontSize(24);
     currentY += 24;
-    doc.text("NSS Activity Report", margin, currentY);
+    doc.text("NSS Activity Report", marginLeft, currentY);
     currentY += 10;
 
     doc.setFontSize(18);
     doc.setFont(fontRegular, "normal");
     currentY += 18;
-    doc.text(`Program Name: ${data.name}`, margin, currentY);
+    doc.text(`Program Name: ${data.name}`, marginLeft, currentY);
     currentY += 14;
 
     doc.setFontSize(14);
-    doc.text(`Category: ${data.category}`, margin, currentY);
+    doc.text(`Category: ${data.category}`, marginLeft, currentY);
     currentY += 14;
-    doc.text(`Date: ${formattedDate}`, margin, currentY);
+    doc.text(`Date: ${formattedDate}`, marginLeft, currentY);
     currentY += 14;
-    doc.text(`Location: (Not Specified)`, margin, currentY);
+    doc.text(`Location: (Not Specified)`, marginLeft, currentY);
     currentY += 10;
 
     doc.setLineWidth(1);
-    doc.line(margin, currentY, pageWidth - margin, currentY);
+    doc.line(marginLeft, currentY, pageWidth - marginRight, currentY);
     currentY += 10; // Divider 
     currentY += 20; // pw.SizedBox(height:20)
 
@@ -187,7 +191,7 @@ export const generateNSSReport = async (
       for (let i = 0; i < images.length; i++) {
         const row = Math.floor(i / 2);
         const col = i % 2;
-        const xPositions = margin + (col * (cellWidth + 10));
+        const xPositions = marginLeft + (col * (cellWidth + 10));
         const yPositions = currentY + (row * (cellHeight + 10)); // mainAxisSpacing: 10
 
         try {
@@ -208,11 +212,11 @@ export const generateNSSReport = async (
 
     currentY += 20; // pw.SizedBox(height:20) or just some spacing
     doc.setLineWidth(1);
-    doc.line(margin, currentY, pageWidth - margin, currentY);
+    doc.line(marginLeft, currentY, pageWidth - marginRight, currentY);
     currentY += 15;
     doc.setFontSize(12);
-    doc.text(`Total Photos: ${images.length}`, margin, currentY);
-    doc.text("Generated by NSS Docs App", pageWidth - margin, currentY, { align: "right" });
+    doc.text(`Total Photos: ${images.length}`, marginLeft, currentY);
+    doc.text("Generated by NSS Docs App", pageWidth - marginRight, currentY, { align: "right" });
   }
 
   const fileName = `NSS_Report_${data.name.replace(/ /g, '_')}.pdf`;
