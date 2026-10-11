@@ -26,7 +26,7 @@ export const generateNSSReport = async (
   // Page margins with extra left margin for document binding
   const marginTop = 32;
   const marginBottom = 32;
-  const marginLeft = 48; // Extra left margin for binding / punching / spiral
+  const marginLeft = 60; // 60pt left binding margin
   const marginRight = 32;
 
   let currentY = marginTop;

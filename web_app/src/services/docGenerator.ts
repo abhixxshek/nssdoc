@@ -98,11 +98,11 @@ export const generateNSSDoc = async (
       ],
     });
 
-    // Content dimensions with extra left margin for document binding:
-    // A4 width: 11906 dxa, left margin: 960 dxa (48pt), right margin: 640 dxa (32pt) => contentWidth: 10306 dxa
+    // Content dimensions with 60pt left margin for document binding:
+    // A4 width: 11906 dxa, left margin: 1200 dxa (60pt), right margin: 640 dxa (32pt) => contentWidth: 10066 dxa
     // Column widths replicating PDF flex 8.2 (1.2, 2.0, 1.0, 1.0, 2.0, 1.0)
-    const colWidths = [1508, 2514, 1257, 1257, 2514, 1256];
-    const totalContentWidth = 10306;
+    const colWidths = [1473, 2455, 1228, 1228, 2455, 1227];
+    const totalContentWidth = 10066;
 
     // Cell padding: 5pt (100 twips) horizontal, vertical adjusted for 24pt height
     const headerCellMargins = { top: 60, bottom: 60, left: 100, right: 100 };
@@ -376,7 +376,7 @@ export const generateNSSDoc = async (
             children: [
               new ImageRun({
                 data: dataUrl,
-                transformation: { width: 330, height: 226 },
+                transformation: { width: 322, height: 226 },
                 type: "jpg",
               }),
             ],
@@ -519,7 +519,7 @@ export const generateNSSDoc = async (
 
     if (images.length > 0) {
       const gridRows: TableRow[] = [];
-      const halfWidth = 5153;
+      const halfWidth = 5033;
 
       for (let i = 0; i < images.length; i += 2) {
         const rowCells: TableCell[] = [];
@@ -541,7 +541,7 @@ export const generateNSSDoc = async (
                       children: [
                         new ImageRun({
                           data: dataUrl,
-                          transformation: { width: 330, height: 240 },
+                          transformation: { width: 322, height: 240 },
                           type: "jpg",
                         }),
                       ],
@@ -589,7 +589,7 @@ export const generateNSSDoc = async (
       }
 
       const nonFormalPhotoTable = new Table({
-        width: { size: 10306, type: WidthType.DXA },
+        width: { size: 10066, type: WidthType.DXA },
         borders: noBorders,
         rows: gridRows,
       });
@@ -605,14 +605,14 @@ export const generateNSSDoc = async (
     });
 
     const footerTable = new Table({
-      width: { size: 10306, type: WidthType.DXA },
+      width: { size: 10066, type: WidthType.DXA },
       borders: noBorders,
       rows: [
         new TableRow({
           cantSplit: true,
           children: [
             new TableCell({
-              width: { size: 5153, type: WidthType.DXA },
+              width: { size: 5033, type: WidthType.DXA },
               children: [
                 new Paragraph({
                   spacing: { before: 0, after: 0 },
@@ -628,7 +628,7 @@ export const generateNSSDoc = async (
               ],
             }),
             new TableCell({
-              width: { size: 5153, type: WidthType.DXA },
+              width: { size: 5033, type: WidthType.DXA },
               children: [
                 new Paragraph({
                   alignment: AlignmentType.RIGHT,
@@ -684,7 +684,7 @@ export const generateNSSDoc = async (
               top: 640, // 32pt in twips
               right: 640, // 32pt in twips
               bottom: 640, // 32pt in twips
-              left: 960, // 48pt in twips (extra left margin for binding)
+              left: 1200, // 60pt in twips (60pt binding margin)
               header: 0, // Ensure header does not encroach on printable area
               footer: 0, // Ensure footer does not encroach on printable area
               gutter: 0,
