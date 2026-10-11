@@ -68,7 +68,7 @@ export const generateNSSDoc = async (
   let documentChildren: (Paragraph | Table)[] = [];
 
   if (formalCategories.includes(data.category)) {
-    // 1. Report title matching PDF template
+    // 1. Title mapping matching PDF template
     let reportTitle = "NSS ACTIVITY REPORT";
     if (data.category === "Community") {
       reportTitle = "REPORTS OF COMMUNITY ACTIVITIES";
@@ -78,7 +78,7 @@ export const generateNSSDoc = async (
       reportTitle = "REPORT OF ORIENTATION PROGRAM";
     }
 
-    // Title Paragraph: 18pt bold, centered, Times New Roman, exactly 20pt spacing after (400 twips)
+    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 20pt spacing after (400 twips)
     const titleParagraph = new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: {
@@ -92,14 +92,14 @@ export const generateNSSDoc = async (
           text: reportTitle,
           font: fontName,
           bold: true,
-          size: "18pt",
+          size: 36, // Exact 18pt in half-points
           color: "000000",
         }),
       ],
     });
 
     // Content dimensions:
-    // A4 width: 11906 dxa, margin: 640 dxa (32pt) each side => contentWidth: 10626 dxa
+    // A4 width: 11906 dxa, margin: 640 dxa (32pt) on each side => contentWidth: 10626 dxa
     // Column widths replicating PDF flex 8.2 (1.2, 2.0, 1.0, 1.0, 2.0, 1.0)
     const colWidths = [1555, 2592, 1296, 1296, 2592, 1295];
     const totalContentWidth = 10626;
@@ -109,6 +109,7 @@ export const generateNSSDoc = async (
 
     // Row 1: Date | [date] | Duration | [duration] Hours | No of volunteers: | [count]
     // Fixed 24pt height (480 twips), exactly matching PDF
+    // Font: 13pt (size: 26 half-points)
     const row1 = new TableRow({
       height: { value: 480, rule: HeightRule.EXACT },
       cantSplit: true,
@@ -125,7 +126,7 @@ export const generateNSSDoc = async (
                   text: "Date",
                   font: fontName,
                   bold: true,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -143,7 +144,7 @@ export const generateNSSDoc = async (
                 new TextRun({
                   text: formattedDate,
                   font: fontName,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -162,7 +163,7 @@ export const generateNSSDoc = async (
                   text: "Duration",
                   font: fontName,
                   bold: true,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -180,7 +181,7 @@ export const generateNSSDoc = async (
                 new TextRun({
                   text: `${data.duration} Hours`,
                   font: fontName,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -199,7 +200,7 @@ export const generateNSSDoc = async (
                   text: "No of volunteers:",
                   font: fontName,
                   bold: true,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -217,7 +218,7 @@ export const generateNSSDoc = async (
                 new TextRun({
                   text: data.volunteerCount,
                   font: fontName,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -229,6 +230,7 @@ export const generateNSSDoc = async (
 
     // Row 2: Program | [program name]
     // Fixed 24pt height (480 twips), exactly matching PDF
+    // Font: 13pt (size: 26 half-points)
     const row2 = new TableRow({
       height: { value: 480, rule: HeightRule.EXACT },
       cantSplit: true,
@@ -245,7 +247,7 @@ export const generateNSSDoc = async (
                   text: "Program",
                   font: fontName,
                   bold: true,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -264,7 +266,7 @@ export const generateNSSDoc = async (
                 new TextRun({
                   text: data.name,
                   font: fontName,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -275,15 +277,16 @@ export const generateNSSDoc = async (
     });
 
     // Row 3: Highlights of program
-    // Replicates the exact remaining box height (~320pt = 6400 twips) from PDF
-    // ensuring the document layout is strictly 1 page without extra gaps or page jumps
+    // Replicates the large rectangular box height from PDF
+    // Left label: 13pt bold (size: 26)
+    // Right content: 14pt regular (size: 28)
     const highlightsCellMargins = { top: 100, bottom: 100, left: 100, right: 100 };
     const highlightsLines = data.highlights ? data.highlights.split("\n") : [""];
     const highlightParagraphs = highlightsLines.map((line, idx) =>
       new Paragraph({
         spacing: {
           before: 0,
-          after: idx === highlightsLines.length - 1 ? 0 : 80,
+          after: idx === highlightsLines.length - 1 ? 0 : 60,
           line: 280,
           lineRule: LineRuleType.AUTO,
         },
@@ -291,7 +294,7 @@ export const generateNSSDoc = async (
           new TextRun({
             text: line,
             font: fontName,
-            size: "14pt",
+            size: 28, // Exact 14pt
             color: "000000",
           }),
         ],
@@ -299,7 +302,7 @@ export const generateNSSDoc = async (
     );
 
     const row3 = new TableRow({
-      height: { value: 6350, rule: HeightRule.EXACT },
+      height: { value: 5600, rule: HeightRule.ATLEAST },
       cantSplit: true,
       children: [
         new TableCell({
@@ -314,7 +317,7 @@ export const generateNSSDoc = async (
                   text: "Highlights of program",
                   font: fontName,
                   bold: true,
-                  size: "13pt",
+                  size: 26, // Exact 13pt
                   color: "000000",
                 }),
               ],
@@ -337,7 +340,7 @@ export const generateNSSDoc = async (
       rows: [row1, row2, row3],
     });
 
-    // Exact 10pt gap between Highlights section and Photo Grid (matching photoGridSpacing = 10)
+    // Exact 10pt gap between Highlights section and Photo Grid (matching photoGridSpacing = 10 in PDF)
     const photoGridSpacingParagraph = new Paragraph({
       spacing: {
         before: 0,
@@ -349,7 +352,7 @@ export const generateNSSDoc = async (
         new TextRun({
           text: "",
           font: fontName,
-          size: 1,
+          size: 2, // 1pt
         }),
       ],
     });
@@ -369,7 +372,7 @@ export const generateNSSDoc = async (
           // cellHeight 180pt - 10pt padding = 170pt => 226px at 96 DPI
           cellContent = new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 0, line: 3390, lineRule: LineRuleType.EXACT },
+            spacing: { before: 0, after: 0, line: 240, lineRule: LineRuleType.AUTO },
             children: [
               new ImageRun({
                 data: dataUrl,
@@ -387,7 +390,7 @@ export const generateNSSDoc = async (
               new TextRun({
                 text: "No Image",
                 font: fontName,
-                size: "14pt",
+                size: 28, // Exact 14pt
                 color: "000000",
               }),
             ],
@@ -401,7 +404,7 @@ export const generateNSSDoc = async (
             new TextRun({
               text: "No Image",
               font: fontName,
-              size: "14pt",
+              size: 28, // Exact 14pt
               color: "000000",
             }),
           ],
@@ -451,7 +454,7 @@ export const generateNSSDoc = async (
           text: "NSS Activity Report",
           font: fontName,
           bold: true,
-          size: "24pt",
+          size: 48, // Exact 24pt
           color: "000000",
         }),
       ],
@@ -463,7 +466,7 @@ export const generateNSSDoc = async (
         new TextRun({
           text: `Program Name: ${data.name}`,
           font: fontName,
-          size: "18pt",
+          size: 36, // Exact 18pt
           color: "000000",
         }),
       ],
@@ -475,7 +478,7 @@ export const generateNSSDoc = async (
         new TextRun({
           text: `Category: ${data.category}`,
           font: fontName,
-          size: "14pt",
+          size: 28, // Exact 14pt
           color: "000000",
         }),
       ],
@@ -487,7 +490,7 @@ export const generateNSSDoc = async (
         new TextRun({
           text: `Date: ${formattedDate}`,
           font: fontName,
-          size: "14pt",
+          size: 28, // Exact 14pt
           color: "000000",
         }),
       ],
@@ -499,7 +502,7 @@ export const generateNSSDoc = async (
         new TextRun({
           text: "Location: (Not Specified)",
           font: fontName,
-          size: "14pt",
+          size: 28, // Exact 14pt
           color: "000000",
         }),
       ],
@@ -550,7 +553,7 @@ export const generateNSSDoc = async (
                         new TextRun({
                           text: "Uploaded File Snippet",
                           font: fontName,
-                          size: "10pt",
+                          size: 20, // Exact 10pt
                           color: "969696",
                         }),
                       ],
@@ -617,7 +620,7 @@ export const generateNSSDoc = async (
                     new TextRun({
                       text: `Total Photos: ${images.length}`,
                       font: fontName,
-                      size: "12pt",
+                      size: 24, // Exact 12pt
                       color: "000000",
                     }),
                   ],
@@ -634,7 +637,7 @@ export const generateNSSDoc = async (
                     new TextRun({
                       text: "Generated by NSS Docs App",
                       font: fontName,
-                      size: "12pt",
+                      size: 24, // Exact 12pt
                       color: "000000",
                     }),
                   ],
@@ -674,14 +677,17 @@ export const generateNSSDoc = async (
         properties: {
           page: {
             size: {
-              width: 11906, // A4 width (210mm) in dxa
-              height: 16838, // A4 height (297mm) in dxa
+              width: 11906, // A4 width (210mm) in twips
+              height: 16838, // A4 height (297mm) in twips
             },
             margin: {
-              top: 640, // 32pt = 640 dxa
-              right: 640,
-              bottom: 640,
-              left: 640,
+              top: 640, // Exact 32pt in twips
+              right: 640, // Exact 32pt in twips
+              bottom: 640, // Exact 32pt in twips
+              left: 640, // Exact 32pt in twips
+              header: 0, // Ensure header does not encroach on printable area
+              footer: 0, // Ensure footer does not encroach on printable area
+              gutter: 0,
             },
           },
         },
