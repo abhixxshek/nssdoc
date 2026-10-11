@@ -78,12 +78,12 @@ export const generateNSSDoc = async (
       reportTitle = "REPORT OF ORIENTATION PROGRAM";
     }
 
-    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 20pt spacing after (400 twips)
+    // Title Paragraph: 18pt bold (size: 36 half-points), centered, Times New Roman, 14pt spacing after (280 twips)
     const titleParagraph = new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: {
         before: 0,
-        after: 400,
+        after: 280,
         line: 360,
         lineRule: LineRuleType.EXACT,
       },
@@ -277,32 +277,33 @@ export const generateNSSDoc = async (
     });
 
     // Row 3: Highlights of program
-    // Replicates the large rectangular box height from PDF
-    // Left label: 13pt bold (size: 26)
-    // Right content: 13pt regular (size: 26) matching PDF font size
+    // Large rectangular box height from PDF
+    // Left label: 12pt bold (size: 24)
+    // Right content: 12pt regular (size: 24) matching PDF visual size
     const highlightsCellMargins = { top: 100, bottom: 100, left: 100, right: 100 };
     const highlightsLines = data.highlights ? data.highlights.split("\n") : [""];
     const highlightParagraphs = highlightsLines.map((line, idx) =>
       new Paragraph({
         spacing: {
           before: 0,
-          after: idx === highlightsLines.length - 1 ? 0 : 40,
-          line: 260,
+          after: idx === highlightsLines.length - 1 ? 0 : 30,
+          line: 240,
           lineRule: LineRuleType.AUTO,
         },
         children: [
           new TextRun({
             text: line,
             font: fontName,
-            size: 26, // Exact 13pt (matching PDF visual size)
+            size: 24, // Exact 12pt (matching PDF visual size)
             color: "000000",
           }),
         ],
       })
     );
 
+    // Fixed height of 5000 twips (250pt) guarantees the document fits strictly on ONE page
     const row3 = new TableRow({
-      height: { value: 5600, rule: HeightRule.ATLEAST },
+      height: { value: 5000, rule: HeightRule.EXACT },
       cantSplit: true,
       children: [
         new TableCell({
@@ -311,13 +312,13 @@ export const generateNSSDoc = async (
           verticalAlign: VerticalAlign.TOP,
           children: [
             new Paragraph({
-              spacing: { before: 0, after: 0, line: 260, lineRule: LineRuleType.AUTO },
+              spacing: { before: 0, after: 0, line: 240, lineRule: LineRuleType.AUTO },
               children: [
                 new TextRun({
                   text: "Highlights of program",
                   font: fontName,
                   bold: true,
-                  size: 26, // Exact 13pt
+                  size: 24, // Exact 12pt
                   color: "000000",
                 }),
               ],
@@ -359,7 +360,7 @@ export const generateNSSDoc = async (
 
     // Photo grid: Strictly 2x2 grid (4 cells) with 180pt height each
     const photoCellWidth = Math.floor(totalContentWidth / 2); // 5313 dxa
-    const photoCellMargins = { top: 100, bottom: 100, left: 100, right: 100 };
+    const photoCellMargins = { top: 0, bottom: 0, left: 0, right: 0 };
 
     const photoCells: TableCell[] = [];
 
@@ -368,16 +369,19 @@ export const generateNSSDoc = async (
       if (i < images.length) {
         try {
           const dataUrl = await compressImage(images[i]);
-          // In PDF: cellWidth 251.6pt, cellHeight 180pt, padding 5pt on all 4 sides => image: 241.6pt (322px) x 170pt (227px)
-          // LineRuleType.EXACT at 3400 twips (170pt) eliminates font descent, ensuring exact 5pt (100 twips) gap on all 4 sides
+          // In PDF: cellWidth 251.65pt, cellHeight 180pt, padding 5pt on all 4 sides
+          // Width: 322px = 241.5pt (4830 twips) => gap = (5033 - 4830)/2 = 101.5 twips = 5.08pt
+          // Height: 226px = 169.5pt (3390 twips) => gap = (3600 - 3390)/2 = 105 twips = 5.25pt
+          // run: { size: 2 } (1pt) removes font descent, and verticalAlign CENTER produces exact 5pt gap on all 4 sides
           cellContent = new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 0, line: 3400, lineRule: LineRuleType.EXACT },
+            spacing: { before: 0, after: 0 },
             children: [
               new ImageRun({
                 data: dataUrl,
-                transformation: { width: 322, height: 227 },
+                transformation: { width: 322, height: 226 },
                 type: "jpg",
+                run: { size: 2 }, // 1pt font: eliminates font descent below image
               }),
             ],
           });
@@ -390,7 +394,7 @@ export const generateNSSDoc = async (
               new TextRun({
                 text: "No Image",
                 font: fontName,
-                size: 26, // 13pt
+                size: 24, // 12pt
                 color: "000000",
               }),
             ],
@@ -404,7 +408,7 @@ export const generateNSSDoc = async (
             new TextRun({
               text: "No Image",
               font: fontName,
-              size: 26, // 13pt
+              size: 24, // 12pt
               color: "000000",
             }),
           ],
@@ -439,11 +443,29 @@ export const generateNSSDoc = async (
       rows: [photoRow1, photoRow2],
     });
 
+    // Explicit 1pt trailing paragraph prevents Microsoft Word from inserting its default 24pt trailing paragraph that causes page 2 overflow
+    const trailingParagraph = new Paragraph({
+      spacing: {
+        before: 0,
+        after: 0,
+        line: 20, // 1pt exact line height (20 twips)
+        lineRule: LineRuleType.EXACT,
+      },
+      children: [
+        new TextRun({
+          text: "",
+          font: fontName,
+          size: 2, // 1pt
+        }),
+      ],
+    });
+
     documentChildren = [
       titleParagraph,
       infoTable,
       photoGridSpacingParagraph,
       photoGridTable,
+      trailingParagraph,
     ];
   } else {
     // Non-Formal template fallback (General/Other)
