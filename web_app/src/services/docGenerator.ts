@@ -279,22 +279,22 @@ export const generateNSSDoc = async (
     // Row 3: Highlights of program
     // Replicates the large rectangular box height from PDF
     // Left label: 13pt bold (size: 26)
-    // Right content: 14pt regular (size: 28)
+    // Right content: 13pt regular (size: 26) matching PDF font size
     const highlightsCellMargins = { top: 100, bottom: 100, left: 100, right: 100 };
     const highlightsLines = data.highlights ? data.highlights.split("\n") : [""];
     const highlightParagraphs = highlightsLines.map((line, idx) =>
       new Paragraph({
         spacing: {
           before: 0,
-          after: idx === highlightsLines.length - 1 ? 0 : 60,
-          line: 280,
+          after: idx === highlightsLines.length - 1 ? 0 : 40,
+          line: 260,
           lineRule: LineRuleType.AUTO,
         },
         children: [
           new TextRun({
             text: line,
             font: fontName,
-            size: 28, // Exact 14pt
+            size: 26, // Exact 13pt (matching PDF visual size)
             color: "000000",
           }),
         ],
@@ -390,7 +390,7 @@ export const generateNSSDoc = async (
               new TextRun({
                 text: "No Image",
                 font: fontName,
-                size: 28, // Exact 14pt
+                size: 26, // 13pt
                 color: "000000",
               }),
             ],
@@ -404,7 +404,7 @@ export const generateNSSDoc = async (
             new TextRun({
               text: "No Image",
               font: fontName,
-              size: 28, // Exact 14pt
+              size: 26, // 13pt
               color: "000000",
             }),
           ],
