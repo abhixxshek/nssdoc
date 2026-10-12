@@ -301,9 +301,9 @@ export const generateNSSDoc = async (
       })
     );
 
-    // Fixed height of 5800 twips (290pt) guarantees the document fits strictly on ONE page
+    // Height of 6250 twips (312.5pt) positions the photo grid further down near the bottom like the PDF, with safe buffer to guarantee ONE single page
     const row3 = new TableRow({
-      height: { value: 5800, rule: HeightRule.EXACT },
+      height: { value: 6250, rule: HeightRule.EXACT },
       cantSplit: true,
       children: [
         new TableCell({
@@ -341,12 +341,12 @@ export const generateNSSDoc = async (
       rows: [row1, row2, row3],
     });
 
-    // Spacing between Highlights section and Photo Grid
+    // Spacing between Highlights section and Photo Grid (200 twips = 10pt, exactly matching photoGridSpacing = 10 in PDF)
     const photoGridSpacingParagraph = new Paragraph({
       spacing: {
         before: 0,
         after: 0,
-        line: 160, // 160 twips = 8pt line height
+        line: 200, // 200 twips = exactly 10pt line height matching PDF
         lineRule: LineRuleType.EXACT,
       },
       children: [
